@@ -14,12 +14,19 @@ This is a Node.js Telegram bot integrated with Paystack to handle VIP subscripti
 ## 📁 Project Structure
 
 # 📦 telegram-vip-bot/ 
+
 │── bot.js          # Main Telegram bot logic
+
 │── payment.js      # Handles payment processing with Paystack
+
 │── config.js       # Configuration file for API keys
+
 │── webhook.js      # Handles Paystack webhook callbacks
+
 │── database.js     # Handles data collection
+
 │── package.json    # Node.js dependencies
+
 │── .env            # Environment variables (keep your keys secure)
 
 
@@ -43,8 +50,11 @@ Install dependencies
 Create a .env file in the root folder:
 
 // .env
+
 TELEGRAM_BOT_TOKEN=your_telegram_bot_token
+
 PAYSTACK_SECRET_KEY=your_paystack_secret_key
+
 WEBHOOK_SECRET=your_webhook_secret
 
 
