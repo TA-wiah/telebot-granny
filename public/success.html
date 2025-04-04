@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Payment Successful</title>
+  <style>
+    body {
+      background-color: #ffffff;
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      color: #1a1a1a;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      height: 100vh;
+      margin: 0;
+    }
+
+    .container {
+      text-align: center;
+      padding: 30px;
+      border-radius: 16px;
+      box-shadow: 0 0 20px rgba(0, 128, 0, 0.1);
+      background-color: #f9f9f9;
+    }
+
+    .success-text {
+      font-size: 26px;
+      font-weight: bold;
+      color: #1a8c3d;
+      margin-top: 20px;
+    }
+
+    .description {
+      font-size: 16px;
+      color: #444;
+      margin: 10px 0 20px;
+    }
+
+    .redirect {
+      font-size: 14px;
+      color: #888;
+    }
+
+    a.button {
+      display: inline-block;
+      padding: 12px 20px;
+      background-color: #1a8c3d;
+      color: white;
+      text-decoration: none;
+      border-radius: 8px;
+      font-weight: bold;
+      transition: background-color 0.3s ease;
+    }
+
+    a.button:hover {
+      background-color: #146e30;
+    }
+
+    img {
+      width: 120px;
+      height: auto;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <img src="https://imgur.com/a/QO4J8lsf" alt="Success">
+    <div class="success-text">🎉 Payment Successful!</div>
+    <div class="description">Thank you for your payment. You're being redirected to the bot to join your VIP group.</div>
+    <a href="https://t.me/ForexforgeBot" class="button">Return to Telegram Bot</a>
+    <div class="redirect">Redirecting in 3 seconds...</div>
+  </div>
+
+  <script>
+    setTimeout(() => {
+      window.location.href = "https://t.me/ForexforgeBot";
+    }, 3000);
+  </script>
+</body>
+</html>
