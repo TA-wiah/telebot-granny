@@ -41,11 +41,11 @@ This is a Node.js Telegram bot integrated with Paystack to handle VIP subscripti
 
 1. **Clone this repo**
 
-   git clone https://github.com/TA-wiah/telebot-granny.git
-   cd telegram-vip-bot
+   `git clone https://github.com/TA-wiah/telebot-granny.git`
+   `cd telegram-vip-bot`
 
 Install dependencies
-- npm install
+- `npm install`
 
 Create a .env file in the root folder:
 
@@ -71,7 +71,7 @@ Use services like Render, Railway, or Glitch for quick deployment.
 Want to help improve the bot? 
 Feel free to fork and contribute:
 
-git clone https://github.com/yourusername/telegram-vip-bot.git
+`git clone https://github.com/yourusername/telegram-vip-bot.git`
 
 Create a new branch
 Make your changes
