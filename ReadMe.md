@@ -81,7 +81,7 @@ Submit a pull request
 
 Ensure your /webhook endpoint is accessible from Paystack (use Ngrok during development).
 
-Recommended cloud platforms:
+# Recommended cloud platforms:
 - Render
 - Railway
 - Vercel (API-only)
