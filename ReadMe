@@ -1,7 +1,7 @@
-# 💎 Telegram VIP Subscription Bot
+###💎 Telegram VIP Subscription Bot
 This is a Node.js Telegram bot integrated with Paystack to handle VIP subscription payments. After successful payment, users are automatically granted access to a specific Telegram VIP group. It is designed to automate subscription and access control without manual checking.
 
-## ✨ Key Features
+##✨ Key Features
 
 - 🔘 Telegram Inline Buttons for VIP Plans
 - 💳 Integrated Paystack Payments
@@ -11,7 +11,7 @@ This is a Node.js Telegram bot integrated with Paystack to handle VIP subscripti
 - 🧾 Metadata tagging for each transaction
 - 🛠️ Modular and easy-to-read code structure
 
-## 📁 Project Structure
+##📁 Project Structure
 
 📦 telegram-vip-bot/ 
         ├── bot.js # Handles the Telegram bot logic 
@@ -23,13 +23,13 @@ This is a Node.js Telegram bot integrated with Paystack to handle VIP subscripti
         └── README.md
 
 
-## 🧩 Requirements
+##🧩 Requirements
 
 - Node.js
 - Telegram Bot Token
 - Paystack Secret Key
 
-## 🔧 Setup Instructions
+##🔧 Setup Instructions
 
 1. **Clone this repo**
 
@@ -55,7 +55,7 @@ Ensure your webhook endpoint (https://yourserver.com/webhook) is publicly access
 
 Use services like Render, Railway, or Glitch for quick deployment.
 
-## 🤝 Contributing
+##🤝 Contributing
 
 Want to help improve the bot? Feel free to fork and contribute:
 git clone https://github.com/yourusername/telegram-vip-bot.git
@@ -64,7 +64,7 @@ Create a new branch
 Make your changes
 Submit a pull request
 
-## 🛠️ Deployment Notes
+##🛠️ Deployment Notes
 Ensure your /webhook endpoint is accessible from Paystack (use Ngrok during development).
 
 Recommended cloud platforms:
@@ -75,7 +75,7 @@ Recommended cloud platforms:
 
 
 
-## ❗ Troubleshooting
+##❗ Troubleshooting
 Payment do not trigger bot?
 Ensure metadata includes chat_id and vip in initiatePayment()
 Check if Paystack webhook is correctly set in your Paystack dashboard
@@ -94,7 +94,7 @@ VIP 5	$500	✅
 
 ✅ Links are only shown after successful payment and auto-deleted after 3 seconds.
 
-## 📜 License
+##📜 License
 - This project is licensed under the MIT License.
 
 Developed by Cyber_Jay with ❤️ for easy Telegram monetization — Automate access. Save time. Go VIP.
