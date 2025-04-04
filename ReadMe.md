@@ -1,4 +1,4 @@
-###💎 Telegram VIP Subscription Bot
+### 💎 Telegram VIP Subscription Bot
 This is a Node.js Telegram bot integrated with Paystack to handle VIP subscription payments. After successful payment, users are automatically granted access to a specific Telegram VIP group. It is designed to automate subscription and access control without manual checking.
 
 ##✨ Key Features
