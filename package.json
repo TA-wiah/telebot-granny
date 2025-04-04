@@ -1,0 +1,20 @@
+{
+  "name": "telegram-vip-bot",
+  "version": "1.0.0",
+  "main": "index.js",
+  "scripts": {
+    "start": "node index.js",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [],
+  "author": "Cyber_Jay",
+  "license": "ISC",
+  "description": "Telegram bot using node-telegram-bot-api that prompts users to subscribe to different VIP tiers.",
+  "dependencies": {
+    "axios": "^1.8.4",
+    "dotenv": "^16.4.7",
+    "express": "^5.1.0",
+    "node-telegram-bot-api": "^0.66.0",
+    "sqlite3": "^5.1.7"
+  }
+}
