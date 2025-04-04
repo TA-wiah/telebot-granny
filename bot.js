@@ -77,7 +77,6 @@ bot.on('callback_query', async (query) => {
         const response = await initiatePayment(chatId, selectedVip, amount);
 
         if (response.status) {
-            if (response.status) {
             bot.sendMessage(chatId, "✅ Please click the button below to complete your payment:", {
                 reply_markup: {
                     inline_keyboard: [
