@@ -77,23 +77,52 @@ bot.on('callback_query', async (query) => {
         const response = await initiatePayment(chatId, selectedVip, amount);
 
         if (response.status) {
-            bot.sendMessage(chatId, `✅ Click the link to complete your payment: ${response.data.authorization_url}`);
+            if (response.status) {
+            bot.sendMessage(chatId, "✅ Please click the button below to complete your payment:", {
+                reply_markup: {
+                    inline_keyboard: [
+                        [
+                            { text: "💳 Pay with Paystack", url: response.data.authorization_url }
+                        ]
+                    ]
+                }
+            });
         } else {
             bot.sendMessage(chatId, "❌ Error processing payment. Try again.");
         }
     }
 });
 
-async function initiatePayment(chatId, vip, amount) {
+
+async function initiatePayment(chatId, vip, amountUSD) {
     try {
-        const response = await axios.post("https://api.paystack.co/transaction/initialize", {
-            email: `${chatId}@telegram.com`,
-            amount: amount * 100,
-            metadata: { chat_id: chatId, vip: vip },
-            callback_url: `https://yourserver.com/webhook`
-        }, {
-            headers: { Authorization: `Bearer ${PAYSTACK_SECRET_KEY}` }
+        // Get real-time exchange rate from USD to GHS
+        const conversion = await axios.get('https://api.exchangerate.host/convert', {
+            params: {
+                from: 'USD',
+                to: 'GHS',
+                amount: amountUSD,
+                apikey: '53f83c67fad68ea8e1e21a36989ff8dd' // optional
+            }
         });
+
+        const amountGHS = conversion.data.result;
+        const amountPesewas = Math.round(amountGHS * 100); // Paystack requires amount in pesewas
+
+        const response = await axios.post(
+            "https://api.paystack.co/transaction/initialize",
+            {
+                email: `${chatId}@telegram.com`,
+                amount: amountPesewas,
+                metadata: { chat_id: chatId, vip: vip },
+                callback_url: `https://telebot-granny.onrender.com/webhook`
+            },
+            {
+                headers: {
+                    Authorization: `Bearer ${process.env.PAYSTACK_SECRET_KEY}`
+                }
+            }
+        );
 
         return response.data;
     } catch (error) {
@@ -159,7 +188,7 @@ bot.onText(/\/contact/, (msg) => {
 You can reach support through:
 
 - Telegram: [@junior_billyhills](https://t.me/junior_billyhills)
-- Email: support@example.com
+- Email: [support@forexforge.com](tottimehtawiah@gmail)
 
 We're happy to help you!
 `;
