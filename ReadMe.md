@@ -13,7 +13,7 @@ This is a Node.js Telegram bot integrated with Paystack to handle VIP subscripti
 
 ## 📁 Project Structure
 
-📦 telegram-vip-bot/ 
+# 📦 telegram-vip-bot/ 
 │── bot.js          # Main Telegram bot logic
 │── payment.js      # Handles payment processing with Paystack
 │── config.js       # Configuration file for API keys
@@ -58,7 +58,9 @@ Use services like Render, Railway, or Glitch for quick deployment.
 
 ## 🤝 Contributing
 
-Want to help improve the bot? Feel free to fork and contribute:
+Want to help improve the bot? 
+Feel free to fork and contribute:
+
 git clone https://github.com/yourusername/telegram-vip-bot.git
 
 Create a new branch
