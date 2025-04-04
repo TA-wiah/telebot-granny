@@ -18,6 +18,7 @@ This is a Node.js Telegram bot integrated with Paystack to handle VIP subscripti
         ├── webhook.js # Webhook endpoint to receive Paystack responses 
         ├── server.js # Starts Express and ties it all together 
         ├── index.js # Entry point to launch the server 
+        │── database.js # Handles data collection
         ├── config.js # Store sensitive credentials 
         ├── package.json 
         └── README.md
@@ -39,13 +40,13 @@ This is a Node.js Telegram bot integrated with Paystack to handle VIP subscripti
 Install dependencies
 - npm install
 
-Create a config.js file in the root folder:
+Create a .env file in the root folder:
 
-// config.js
-module.exports = {
-  TELEGRAM_BOT_TOKEN: 'your-telegram-bot-token',
-  PAYSTACK_SECRET_KEY: 'your-paystack-secret-key'
-};
+// .env
+TELEGRAM_BOT_TOKEN=your_telegram_bot_token
+PAYSTACK_SECRET_KEY=your_paystack_secret_key
+WEBHOOK_SECRET=your_webhook_secret
+
 
 Run the bot
 
@@ -84,15 +85,19 @@ Make sure Telegram bot has permission to send messages and group links
 Check the bot is not blocked or muted by user
 
 
-💬 VIP Plans
-Plan	Price (USD)	Telegram Group Invite
-VIP 1	$50	    ✅
-VIP 2	$100	✅
-VIP 3	$200	✅
-VIP 4	$350	✅
-VIP 5	$500	✅
+## 💬 VIP Plans
+Plan	 Price (USD)	 Telegram Group Invite
+VIP 1	  $50	           ✅
 
-✅ Links are only shown after successful payment and auto-deleted after 3 seconds.
+VIP 2	  $100		   ✅
+
+VIP 3	  $200	           ✅
+
+VIP 4	  $350	           ✅
+
+VIP 5	  $500	           ✅
+
+- Links are only shown after successful payment and auto-deleted after 3 seconds.
 
 ## 📜 License
 - This project is licensed under the MIT License.
