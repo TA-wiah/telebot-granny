@@ -14,14 +14,14 @@ This is a Node.js Telegram bot integrated with Paystack to handle VIP subscripti
 ## 📁 Project Structure
 
 📦 telegram-vip-bot/ 
-        ├── bot.js # Handles the Telegram bot logic 
-        ├── webhook.js # Webhook endpoint to receive Paystack responses 
-        ├── server.js # Starts Express and ties it all together 
-        ├── index.js # Entry point to launch the server 
-        │── database.js # Handles data collection
-        ├── config.js # Store sensitive credentials 
-        ├── package.json 
-        └── README.md
+│── bot.js          # Main Telegram bot logic
+│── payment.js      # Handles payment processing with Paystack
+│── config.js       # Configuration file for API keys
+│── webhook.js      # Handles Paystack webhook callbacks
+│── database.js     # Handles data collection
+│── package.json    # Node.js dependencies
+│── .env            # Environment variables (keep your keys secure)
+
 
 
 ## 🧩 Requirements
@@ -66,6 +66,7 @@ Make your changes
 Submit a pull request
 
 ## 🛠️ Deployment Notes
+
 Ensure your /webhook endpoint is accessible from Paystack (use Ngrok during development).
 
 Recommended cloud platforms:
@@ -77,6 +78,7 @@ Recommended cloud platforms:
 
 
 ## ❗ Troubleshooting
+
 Payment do not trigger bot?
 Ensure metadata includes chat_id and vip in initiatePayment()
 Check if Paystack webhook is correctly set in your Paystack dashboard
@@ -87,6 +89,7 @@ Check the bot is not blocked or muted by user
 
 ## 💬 VIP Plans
 Plan	 Price (USD)	 Telegram Group Invite
+
 VIP 1	  $50	           ✅
 
 VIP 2	  $100		   ✅
@@ -100,6 +103,7 @@ VIP 5	  $500	           ✅
 - Links are only shown after successful payment and auto-deleted after 3 seconds.
 
 ## 📜 License
+
 - This project is licensed under the MIT License.
 
 Developed by Cyber_Jay with ❤️ for easy Telegram monetization — Automate access. Save time. Go VIP.
