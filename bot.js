@@ -3,7 +3,10 @@ const TelegramBot = require('node-telegram-bot-api');
 const axios = require('axios');
 const { PAYSTACK_SECRET_KEY, TELEGRAM_BOT_TOKEN } = require('./config');
 
-const bot = new TelegramBot(TELEGRAM_BOT_TOKEN, { polling: true });
+const bot = new TelegramBot(TELEGRAM_BOT_TOKEN);
+bot.setWebHook(`https://telebot-granny.onrender.com/bot${TELEGRAM_BOT_TOKEN}`);
+
+// const bot = new TelegramBot(TELEGRAM_BOT_TOKEN, { polling: true });
 
 const vipPrices = {
     vip1: 50,
