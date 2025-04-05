@@ -109,9 +109,6 @@ bot.on('callback_query', async (query) => {
 });
 
 
-const axios = require('axios');
-require('dotenv').config();
-
 async function initiatePayment(chatId, vip, usdAmount) {
     try {
         // Use the API key from the .env file
