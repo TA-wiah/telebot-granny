@@ -24,11 +24,51 @@ router.post('/webhook', (req, res) => {
         const vipLevel = event.data.metadata.vip;
         const groupLink = vipLinks[vipLevel];
 
-        // Save subscription to DB
-        db.run(
-            `INSERT OR REPLACE INTO subscriptions (chat_id, vip_level) VALUES (?, ?)`,
-            [chatId, vipLevel]
-        );
+        // Save or add subscription to DB
+        db.get(`SELECT * FROM subscriptions WHERE chat_id = ?`, [chatId], (err, row) => {
+            if (err) {
+                console.error("Error checking for existing subscription:", err);
+            } else if (row) {
+                console.log("Subscription already exists for chat_id:", chatId);
+        
+                // Add the new vip_level to the existing one (combine them if they're different)
+                const existingVipLevels = row.vip_level.split(', ');  // Assuming vip_levels are stored as comma-separated values
+                if (!existingVipLevels.includes(vipLevel)) {
+                    // If the new vip_level is not already included, add it
+                    existingVipLevels.push(vipLevel);
+        
+                    // Update the subscription with the new combined vip_levels
+                    const updatedVipLevels = existingVipLevels.join(', ');  // Join the levels back as a string
+                    db.run(
+                        `UPDATE subscriptions SET vip_level = ? WHERE chat_id = ?`,
+                        [updatedVipLevels, chatId],
+                        (err) => {
+                            if (err) {
+                                console.error("Error updating subscription to add new vip_level:", err);
+                            } else {
+                                console.log(`Subscription updated for chat_id: ${chatId} with new vip_levels: ${updatedVipLevels}`);
+                            }
+                        }
+                    );
+                } else {
+                    console.log(`The user already has the ${vipLevel} VIP level.`);
+                }
+            } else {
+                // If no existing subscription, insert the new subscription
+                db.run(
+                    `INSERT INTO subscriptions (chat_id, vip_level) VALUES (?, ?)`,
+                    [chatId, vipLevel],
+                    (err) => {
+                        if (err) {
+                            console.error("Error saving subscription to database:", err);
+                        } else {
+                            console.log(`Subscription saved for chat_id: ${chatId}, vip_level: ${vipLevel}`);
+                        }
+                    }
+                );
+            }
+        });
+
 
         const successMessage = `
 🎉 *Congratulations!* 🎉
