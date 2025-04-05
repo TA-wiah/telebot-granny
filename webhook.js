@@ -53,4 +53,10 @@ _⚠️ Note: This link will disappear in 3 seconds for security._
     res.sendStatus(200);
 });
 
+// Handle GET request when user is redirected from Paystack
+router.get('/webhook', (req, res) => {
+    res.sendFile(require('path').join(__dirname, 'public/success.html'));
+});
+
+
 module.exports = router;
