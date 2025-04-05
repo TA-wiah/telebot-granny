@@ -25,7 +25,7 @@ const vipLinks = {
 };
 
 const ADMIN_CHAT_ID = 5713039213; // Replace with your actual numeric Telegram chat ID
-const ADMIN_PASSWORD = "your_secure_password";
+const ADMIN_PASSWORD = "your_password";
 const pendingAuth = {};
 
 // to print your Chat_ID
@@ -95,8 +95,6 @@ bot.on('callback_query', async (query) => {
     }
 });
 
-
-const axios = require('axios');
 
 async function initiatePayment(chatId, vip, usdAmount) {
     try {
