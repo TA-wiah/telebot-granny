@@ -58,6 +58,11 @@ PAYSTACK_SECRET_KEY=your_paystack_secret_key
 
 WEBHOOK_SECRET=your_webhook_secret
 
+EXCHANGE_API_KEY=your_exchange_api_key
+
+PASSWORD_PASSWORD=custom_password
+
+ADMIN_ID=your_telegram_chat_id
 
 Run the bot
 
