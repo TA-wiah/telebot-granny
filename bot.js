@@ -2,6 +2,7 @@
 const TelegramBot = require('node-telegram-bot-api');
 const axios = require('axios');
 const { PAYSTACK_SECRET_KEY, TELEGRAM_BOT_TOKEN } = require('./config');
+require('dotenv').config(); // Make sure to load your environment variables
 
 const bot = new TelegramBot(TELEGRAM_BOT_TOKEN);
 bot.setWebHook(`https://telebot-granny.onrender.com/bot${TELEGRAM_BOT_TOKEN}`);
@@ -107,26 +108,47 @@ bot.on('callback_query', async (query) => {
     }
 });
 
+
+// API key should be stored in the .env file for security
+const EXCHANGE_API_KEY = process.env.EXCHANGE_API_KEY; // Use this key from the environment variable
+
 async function initiatePayment(chatId, vip, usdAmount) {
     try {
-        // Convert USD to GHS
+        // Validate USD amount
+        if (isNaN(usdAmount) || usdAmount <= 0) {
+            throw new Error('Invalid USD Amount');
+        }
+
+        // Convert USD to GHS using exchangerate.host API
         const exchangeRes = await axios.get('https://api.exchangerate.host/convert', {
             params: {
                 from: 'USD',
                 to: 'GHS',
-                amount: usdAmount
+                amount: usdAmount,
+                api_key: EXCHANGE_API_KEY // Make sure to pass the API key securely
             }
         });
 
-        const ghsAmount = parseFloat(exchangeRes.data.result);
-        const amountInKobo = Math.round(ghsAmount * 100); // Convert to pesewas
+        // Log the full API response to debug
+        console.log('Exchange API Response:', exchangeRes.data);
 
+        // Check if the exchange response is valid
+        if (!exchangeRes.data.result) {
+            throw new Error('Invalid response from the exchange API.');
+        }
+
+        // Parse the GHS amount and convert it to kobo (Pesewas)
+        const ghsAmount = parseFloat(exchangeRes.data.result);
+        const amountInKobo = Math.round(ghsAmount * 100); // Convert GHS to kobo (1 GHS = 100 kobo)
+
+        console.log(`USD: $${usdAmount} → GHS: ₵${ghsAmount} → Pesewas: ${amountInKobo}`);
+
+        // Ensure that the amount is valid and greater than 0
         if (amountInKobo <= 0 || isNaN(amountInKobo)) {
             throw new Error("Invalid converted amount.");
         }
 
-        console.log(`USD: $${usdAmount} → GHS: ₵${ghsAmount} → Pesewas: ${amountInKobo}`);
-
+        // Call Paystack API to initialize the payment
         const response = await axios.post("https://api.paystack.co/transaction/initialize", {
             email: `${chatId}@telegram.com`,
             amount: amountInKobo,
@@ -134,16 +156,21 @@ async function initiatePayment(chatId, vip, usdAmount) {
             callback_url: `https://telebot-granny.onrender.com/webhook`
         }, {
             headers: {
-                Authorization: `Bearer ${process.env.PAYSTACK_SECRET_KEY}`
+                Authorization: `Bearer ${process.env.PAYSTACK_SECRET_KEY}` // Ensure your Paystack secret key is set correctly in your environment variables
             }
         });
 
+        // Return the Paystack response data
         return response.data;
     } catch (error) {
         console.error("Payment Error:", error.response?.data || error.message);
+        if (error.response) {
+            console.log('API Response:', error.response.data); // Log the full error response from the Paystack API
+        }
         return { status: false };
     }
 }
+
 
 // bot.onText(/\/mysubscription/, (msg) => {
 //     const chatId = msg.chat.id;
