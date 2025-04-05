@@ -175,8 +175,8 @@ bot.onText(/\/mysubscription/, (msg) => {
         }
 
         if (row) {
-            // Split vip_level if multiple levels are stored in a comma-separated string
-            const vipLevels = row.vip_level.split(', ').map(level => level.toUpperCase()); // Optional: format levels to uppercase
+            // Split vip_level by comma and optional space (handles both 'vip1,vip2' and 'vip1, vip2')
+            const vipLevels = row.vip_level.split(/\s*,\s*/).map(level => level.toUpperCase());  // Optional: format levels to uppercase
             const formattedVip = vipLevels.map(level => `- *${level}*`).join('\n');  // Format each level with bullet points
 
             bot.sendMessage(chatId, `📄 *Your Subscription:*\n\n|------------------------|\n${formattedVip}\n|------------------------|\n\nThank you for being a VIP! 💎`, { parse_mode: 'Markdown' });
@@ -185,7 +185,6 @@ bot.onText(/\/mysubscription/, (msg) => {
         }
     });
 });
-
 
 
 bot.onText(/\/help/, (msg) => {
