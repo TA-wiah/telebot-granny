@@ -109,46 +109,33 @@ bot.on('callback_query', async (query) => {
 });
 
 
-// API key should be stored in the .env file for security
-const EXCHANGE_API_KEY = process.env.EXCHANGE_API_KEY; // Use this key from the environment variable
+const axios = require('axios');
+require('dotenv').config();
 
 async function initiatePayment(chatId, vip, usdAmount) {
     try {
-        // Validate USD amount
-        if (isNaN(usdAmount) || usdAmount <= 0) {
-            throw new Error('Invalid USD Amount');
-        }
+        // Use the API key from the .env file
+        const apiKey = process.env.EXCHANGE_API_KEY;
 
-        // Convert USD to GHS using exchangerate.host API
+        // Convert USD to GHS using the exchange API
         const exchangeRes = await axios.get('https://api.exchangerate.host/convert', {
             params: {
                 from: 'USD',
                 to: 'GHS',
                 amount: usdAmount,
-                api_key: EXCHANGE_API_KEY // Make sure to pass the API key securely
+                access_key: apiKey // Include the access key in the request
             }
         });
 
-        // Log the full API response to debug
-        console.log('Exchange API Response:', exchangeRes.data);
-
-        // Check if the exchange response is valid
-        if (!exchangeRes.data.result) {
-            throw new Error('Invalid response from the exchange API.');
-        }
-
-        // Parse the GHS amount and convert it to kobo (Pesewas)
         const ghsAmount = parseFloat(exchangeRes.data.result);
-        const amountInKobo = Math.round(ghsAmount * 100); // Convert GHS to kobo (1 GHS = 100 kobo)
+        const amountInKobo = Math.round(ghsAmount * 100); // Convert to pesewas
 
-        console.log(`USD: $${usdAmount} → GHS: ₵${ghsAmount} → Pesewas: ${amountInKobo}`);
-
-        // Ensure that the amount is valid and greater than 0
         if (amountInKobo <= 0 || isNaN(amountInKobo)) {
             throw new Error("Invalid converted amount.");
         }
 
-        // Call Paystack API to initialize the payment
+        console.log(`USD: $${usdAmount} → GHS: ₵${ghsAmount} → Pesewas: ${amountInKobo}`);
+
         const response = await axios.post("https://api.paystack.co/transaction/initialize", {
             email: `${chatId}@telegram.com`,
             amount: amountInKobo,
@@ -156,21 +143,16 @@ async function initiatePayment(chatId, vip, usdAmount) {
             callback_url: `https://telebot-granny.onrender.com/webhook`
         }, {
             headers: {
-                Authorization: `Bearer ${process.env.PAYSTACK_SECRET_KEY}` // Ensure your Paystack secret key is set correctly in your environment variables
+                Authorization: `Bearer ${process.env.PAYSTACK_SECRET_KEY}`
             }
         });
 
-        // Return the Paystack response data
         return response.data;
     } catch (error) {
         console.error("Payment Error:", error.response?.data || error.message);
-        if (error.response) {
-            console.log('API Response:', error.response.data); // Log the full error response from the Paystack API
-        }
         return { status: false };
     }
 }
-
 
 // bot.onText(/\/mysubscription/, (msg) => {
 //     const chatId = msg.chat.id;
