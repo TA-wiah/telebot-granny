@@ -4,6 +4,8 @@ const axios = require('axios');
 const { PAYSTACK_SECRET_KEY, TELEGRAM_BOT_TOKEN } = require('./config');
 require('dotenv').config(); // Make sure to load your environment variables
 
+const db = require('./database');
+
 const bot = new TelegramBot(TELEGRAM_BOT_TOKEN);
 bot.setWebHook(`https://telebot-granny.onrender.com/bot${TELEGRAM_BOT_TOKEN}`);
 
