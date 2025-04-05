@@ -96,35 +96,37 @@ bot.on('callback_query', async (query) => {
 });
 
 
-async function initiatePayment(chatId, vip, amountUSD) {
+const axios = require('axios');
+
+async function initiatePayment(chatId, vip, usdAmount) {
     try {
-        // Get real-time exchange rate from USD to GHS
-        const conversion = await axios.get('https://api.exchangerate.host/convert', {
+        // Convert USD to GHS using exchangerate.host
+        const exchangeRes = await axios.get(`https://api.exchangerate.host/convert`, {
             params: {
                 from: 'USD',
                 to: 'GHS',
-                amount: amountUSD,
-                apikey: '53f83c67fad68ea8e1e21a36989ff8dd' // optional
+                amount: usdAmount,
+                api_key: '53f83c67fad68ea8e1e21a36989ff8dd'
             }
         });
 
-        const amountGHS = conversion.data.result;
-        const amountPesewas = Math.round(amountGHS * 100); // Paystack requires amount in pesewas
+        const ghsAmount = exchangeRes.data.result;
+        const amountInKobo = Math.round(ghsAmount * 100); // GHS to Pesewas (kobo)
 
-        const response = await axios.post(
-            "https://api.paystack.co/transaction/initialize",
-            {
-                email: `${chatId}@telegram.com`,
-                amount: amountPesewas,
-                metadata: { chat_id: chatId, vip: vip },
-                callback_url: `https://telebot-granny.onrender.com/webhook`
-            },
-            {
-                headers: {
-                    Authorization: `Bearer ${process.env.PAYSTACK_SECRET_KEY}`
-                }
+        if (amountInKobo <= 0 || isNaN(amountInKobo)) {
+            throw new Error("Invalid converted amount.");
+        }
+
+        const response = await axios.post("https://api.paystack.co/transaction/initialize", {
+            email: `${chatId}@telegram.com`,
+            amount: amountInKobo,
+            metadata: { chat_id: chatId, vip: vip },
+            callback_url: `https://telebot-granny.onrender.com/webhook`
+        }, {
+            headers: {
+                Authorization: `Bearer ${PAYSTACK_SECRET_KEY}`
             }
-        );
+        });
 
         return response.data;
     } catch (error) {
