@@ -61,25 +61,34 @@ With this bot, you can unlock access to our _exclusive_ VIP Telegram groups. Eac
     bot.sendMessage(chatId, welcomeMessage, { parse_mode: 'Markdown' });
 });
 
-
+// Handle /subscribe command
 bot.onText(/\/subscribe/, (msg) => {
     const chatId = msg.chat.id;
-    bot.sendMessage(chatId, "Please choose a VIP package to subscribe:", {
+
+    bot.sendMessage(chatId, "📦 Please choose a VIP package to subscribe:", {
         reply_markup: {
-            inline_keyboard: Object.keys(vipPrices).map(vip => [{ text: `${vip.toUpperCase()} - $${vipPrices[vip]}`, callback_data: vip }])
+            inline_keyboard: Object.keys(vipPrices).map(vip => [
+                { text: `${vip.toUpperCase()} - $${vipPrices[vip]}`, callback_data: vip }
+            ])
         }
     });
 });
 
+// Handle button click (VIP package selection)
 bot.on('callback_query', async (query) => {
     const chatId = query.message.chat.id;
     const selectedVip = query.data;
 
-    if (vipPrices[selectedVip]) {
-        const amount = vipPrices[selectedVip];
+    if (!vipPrices[selectedVip]) {
+        return bot.answerCallbackQuery(query.id, { text: "❌ Invalid selection." });
+    }
+
+    const amount = vipPrices[selectedVip];
+
+    try {
         const response = await initiatePayment(chatId, selectedVip, amount);
 
-        if (response.status) {
+        if (response.status && response.data && response.data.authorization_url) {
             bot.sendMessage(chatId, "✅ Please click the button below to complete your payment:", {
                 reply_markup: {
                     inline_keyboard: [
@@ -90,39 +99,42 @@ bot.on('callback_query', async (query) => {
                 }
             });
         } else {
-            bot.sendMessage(chatId, "❌ Error processing payment. Try again.");
+            bot.sendMessage(chatId, "❌ Error processing payment. Please try again later.");
         }
+    } catch (error) {
+        console.error("Payment initiation failed:", error);
+        bot.sendMessage(chatId, "⚠️ Something went wrong while initiating payment.");
     }
 });
 
-
 async function initiatePayment(chatId, vip, usdAmount) {
     try {
-        // Convert USD to GHS using exchangerate.host
-        const exchangeRes = await axios.get(`https://api.exchangerate.host/convert`, {
+        // Convert USD to GHS
+        const exchangeRes = await axios.get('https://api.exchangerate.host/convert', {
             params: {
                 from: 'USD',
                 to: 'GHS',
-                amount: usdAmount,
-                api_key: '53f83c67fad68ea8e1e21a36989ff8dd'
+                amount: usdAmount
             }
         });
 
-        const ghsAmount = exchangeRes.data.result;
-        const amountInKobo = Math.round(ghsAmount * 100); // GHS to Pesewas (kobo)
+        const ghsAmount = parseFloat(exchangeRes.data.result);
+        const amountInKobo = Math.round(ghsAmount * 100); // Convert to pesewas
 
         if (amountInKobo <= 0 || isNaN(amountInKobo)) {
             throw new Error("Invalid converted amount.");
         }
 
+        console.log(`USD: $${usdAmount} → GHS: ₵${ghsAmount} → Pesewas: ${amountInKobo}`);
+
         const response = await axios.post("https://api.paystack.co/transaction/initialize", {
             email: `${chatId}@telegram.com`,
             amount: amountInKobo,
-            metadata: { chat_id: chatId, vip: vip },
+            metadata: { chat_id: chatId, vip },
             callback_url: `https://telebot-granny.onrender.com/webhook`
         }, {
             headers: {
-                Authorization: `Bearer ${PAYSTACK_SECRET_KEY}`
+                Authorization: `Bearer ${process.env.PAYSTACK_SECRET_KEY}`
             }
         });
 
