@@ -79,14 +79,14 @@ You're now officially a VIP member! 🔐💎
 👇 Tap the link below to join your exclusive VIP group:
 ${groupLink}
 
-_⚠️ Note: This link will disappear in 3 seconds for security._
+_⚠️ Note: This link will disappear in 20 seconds for security._
         `;
 
         bot.sendMessage(chatId, successMessage, { parse_mode: 'Markdown' })
             .then((sentMessage) => {
                 setTimeout(() => {
                     bot.deleteMessage(chatId, sentMessage.message_id);
-                }, 30000); // 30000 ms = 0.5 minute
+                }, 15000); // 15000 ms = 0.15 minute
             });
     } else if (event.event === "charge.failed") {
         const chatId = event.data.metadata.chat_id;
