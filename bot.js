@@ -175,13 +175,17 @@ bot.onText(/\/mysubscription/, (msg) => {
         }
 
         if (row) {
-            const vip = row.vip_level.toUpperCase();
-            bot.sendMessage(chatId, `📄 *Your Subscription:*\n\n\nYou are currently subscribed to *${vip}*.\n\nThank you for being a VIP! 💎`, { parse_mode: 'Markdown' });
+            // Split vip_level if multiple levels are stored in a comma-separated string
+            const vipLevels = row.vip_level.split(', ').map(level => level.toUpperCase()); // Optional: format levels to uppercase
+            const formattedVip = vipLevels.map(level => `- *${level}*`).join('\n');  // Format each level with bullet points
+
+            bot.sendMessage(chatId, `📄 *Your Subscription:*\n\n|------------------------|\n${formattedVip}\n|------------------------|\n\nThank you for being a VIP! 💎`, { parse_mode: 'Markdown' });
         } else {
             bot.sendMessage(chatId, "❌ You don't have an active VIP subscription.\nUse /subscribe to join a plan.", { parse_mode: 'Markdown' });
         }
     });
 });
+
 
 
 bot.onText(/\/help/, (msg) => {
