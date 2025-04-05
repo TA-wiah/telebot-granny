@@ -4,6 +4,11 @@ const express = require('express');
 const { bot, vipLinks } = require('./bot');
 const db = require('./database');
 
+app.post(`/bot${TELEGRAM_BOT_TOKEN}`, (req, res) => {
+    bot.processUpdate(req.body);
+    res.sendStatus(200);
+});
+
 const router = express.Router();
 
 router.post('/webhook', (req, res) => {
