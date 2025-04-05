@@ -11,6 +11,11 @@ This is a Node.js Telegram bot integrated with Paystack to handle VIP subscripti
 - 🧾 Metadata tagging for each transaction
 - 🛠️ Modular and easy-to-read code structure
 
+## 🚀 Get Started
+
+[![Repo/Fork](https://img.shields.io/badge/Fork%20this%20repo-GitHub-blue?logo=github)](https://github.com/TA-wiah/telebot-granny/fork)
+
+
 ## 📁 Project Structure
 
 # 📦 telegram-vip-bot/ 
