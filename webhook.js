@@ -46,7 +46,7 @@ _⚠️ Note: This link will disappear in 3 seconds for security._
             .then((sentMessage) => {
                 setTimeout(() => {
                     bot.deleteMessage(chatId, sentMessage.message_id);
-                }, 5000);
+                }, 30000); // 30000 ms = 0.5 minute
             });
     } else if (event.event === "charge.failed") {
         const chatId = event.data.metadata.chat_id;
