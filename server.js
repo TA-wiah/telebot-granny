@@ -3,11 +3,6 @@ const express = require('express');
 const path = require('path');
 const webhookRoutes = require('./webhook');
 
-app.post(`/bot${TELEGRAM_BOT_TOKEN}`, (req, res) => {
-    bot.processUpdate(req.body);
-    res.sendStatus(200);
-});
-
 const app = express();
 app.use(express.json());
 
