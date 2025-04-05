@@ -4,6 +4,7 @@ const express = require('express');
 const router = express.Router();
 const { bot, vipLinks } = require('./bot');
 const db = require('./database');
+require('dotenv').config();
 const TELEGRAM_BOT_TOKEN = process.env.TELEGRAM_BOT_TOKEN; // Make sure this is defined in .env or Render
 
 // Telegram Webhook (connects to Telegram bot API)
@@ -15,6 +16,8 @@ router.post(`/bot${TELEGRAM_BOT_TOKEN}`, (req, res) => {
 // Paystack Webhook (charge.success, charge.failed)
 router.post('/webhook', (req, res) => {
     const event = req.body;
+    console.log("Paystack Webhook Event:", JSON.stringify(event, null, 2)); // temporary
+
 
     if (event.event === "charge.success") {
         const chatId = event.data.metadata.chat_id;
@@ -43,7 +46,7 @@ _⚠️ Note: This link will disappear in 3 seconds for security._
             .then((sentMessage) => {
                 setTimeout(() => {
                     bot.deleteMessage(chatId, sentMessage.message_id);
-                }, 3000);
+                }, 5000);
             });
     } else if (event.event === "charge.failed") {
         const chatId = event.data.metadata.chat_id;
